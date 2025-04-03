@@ -1,0 +1,4 @@
+rich
+scapy
+scapy_usbbluetooth
+usbbluetooth
