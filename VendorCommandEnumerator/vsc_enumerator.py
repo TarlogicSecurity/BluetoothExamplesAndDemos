@@ -4,7 +4,7 @@ import usbbluetooth
 from scapy_usbbluetooth import UsbBluetoothSocket
 from rich.console import Console
 from rich.prompt import IntPrompt
-from scapy.layers.bluetooth import HCI_Hdr, HCI_Command_Hdr, HCI_Cmd_Reset, HCI_Event_Command_Complete
+from scapy.layers.bluetooth import HCI_Hdr, HCI_Command_Hdr, HCI_Cmd_Reset, HCI_Event_Command_Complete, HCI_Cmd_Read_Local_Version_Information
 
 
 # Print a nice banner!
@@ -55,6 +55,9 @@ for ocf in range(0x400):  # 0 to 0x3FF
             response.show()
 
 if len(opcodes) != 0:
+    console.log(f"Device description: {device.get_description()}")
     op_str = [f"0x{op:04x}" for op in opcodes]
-    console.log(
-        f"Here is a list of possible vendor opcodes: {', '.join(op_str)}")
+    console.log(f"Possible vendor opcodes: {', '.join(op_str)}")
+    console.log("Local version information:")
+    response = socket.sr1(HCI_Hdr() / HCI_Command_Hdr() / HCI_Cmd_Read_Local_Version_Information(), verbose=0, timeout=1)
+    response.show()
